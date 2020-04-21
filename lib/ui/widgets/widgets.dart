@@ -1,4 +1,5 @@
 import 'package:covid19_info/core/models/country_info.dart';
+import 'package:covid19_info/core/viewmodels/world_cases_list_view_model.dart';
 import 'package:covid19_info/ui/const.dart';
 import 'package:flutter/material.dart';
 
@@ -104,14 +105,16 @@ class HorizontalListView extends StatelessWidget {
 
 class HorizontalCard extends StatelessWidget {
   final CountryInfo item;
+  final double width;
+  final double height;
 
-  HorizontalCard({this.item});
+  HorizontalCard({this.item, this.width = 200, this.height = 180});
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: 200,
-      height: 180,
+      width: width,
+      height: height,
       child: Card(
         margin: EdgeInsets.symmetric(horizontal: 10.0),
         child: Container(
@@ -125,7 +128,7 @@ class HorizontalCard extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   Image.asset(
-                    'images/${item.name.toLowerCase()}.png',
+                    'images/flags/${item.isoCode.toLowerCase()}.png',
                     height: 50.0,
                     width: 50.0,
                   ),
@@ -215,9 +218,10 @@ class VerticalCard extends StatelessWidget {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
-                    CircleAvatar(
-                      backgroundImage:
-                          AssetImage('images/${item.name.toLowerCase()}.png'),
+                    Image.asset(
+                      'images/flags/${item.isoCode.toLowerCase()}.png',
+                      height: 40.0,
+                      width: 40.0,
                     ),
                     SizedBox(
                       height: 2.0,

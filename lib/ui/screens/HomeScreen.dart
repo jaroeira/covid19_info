@@ -142,6 +142,27 @@ class HomeScreen extends StatelessWidget {
             ),
           ),
           kDefaultVerticalSpacer,
+          model.hasUserLocation()
+              ? FixedHeightContainer(
+                  height: 180,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Text(
+                        'Your Location',
+                        style: kTitleTextStyle,
+                      ),
+                      SizedBox(
+                        height: 5,
+                      ),
+                      HorizontalCard(
+                        height: 130,
+                        item: model.userLocation,
+                      ),
+                    ],
+                  ),
+                )
+              : Container(),
           FixedHeightContainer(
             height: 185,
             child: Column(

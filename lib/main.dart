@@ -1,7 +1,6 @@
 import 'package:covid19_info/locator.dart';
 import 'package:covid19_info/ui/screens/HomeScreen.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 
 void main() {
   setupLocator();

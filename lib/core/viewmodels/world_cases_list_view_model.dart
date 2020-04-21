@@ -2,7 +2,9 @@ import 'package:covid19_info/core/enums/view_state.dart';
 import 'package:covid19_info/core/models/country_info.dart';
 import 'package:covid19_info/core/models/world_info.dart';
 import 'package:covid19_info/core/repositories/covid19_info_repository.dart';
+import 'package:covid19_info/core/services/location_service.dart';
 import 'package:covid19_info/core/viewmodels/base_view_model.dart';
+import 'package:covid19_info/locator.dart';
 
 class WorldCasesListViewModel extends BaseModel {
   final repository = Covid19InfoRepository();
@@ -17,6 +19,9 @@ class WorldCasesListViewModel extends BaseModel {
   WorldInfo _worldInfo = WorldInfo();
 
   WorldInfo get worldInfo => _worldInfo;
+
+  CountryInfo userLocation;
+  String _userCountryName = '';
 
   //If there is a filter term return the filtered list else return the full list
   List<CountryInfo> get countryInfoList =>
@@ -34,6 +39,10 @@ class WorldCasesListViewModel extends BaseModel {
     _top5ByCasesCountryInfoList =
         _top5ByCasesCountryInfoList.getRange(0, endIndex).toList();
     return _top5ByCasesCountryInfoList;
+  }
+
+  bool hasUserLocation() {
+    return userLocation != null && _userCountryName != '';
   }
 
   String _filterText = '';
@@ -60,6 +69,7 @@ class WorldCasesListViewModel extends BaseModel {
 
     await _getCovid19InfoCountryList();
     await _getWorldTotalStat();
+    await _getUserLocation();
 
     setState(ViewState.Idle);
   }
@@ -95,6 +105,27 @@ class WorldCasesListViewModel extends BaseModel {
     } catch (e) {
       setState(ViewState.Error);
       throw e;
+    }
+  }
+
+  Future<void> _getUserLocation() async {
+    final locationService = locator<LocationService>();
+    if (await locationService.hasPermission()) {
+      try {
+        print('Location Perssmision Granted!');
+        _userCountryName = await locationService.getPlaceForCurrentLocation();
+        userLocation = _countryInfoList.firstWhere(
+            (info) => info.name.toLowerCase() == _userCountryName,
+            orElse: () => null);
+      } catch (e) {
+        userLocation = null;
+        _userCountryName = '';
+        print(e);
+      }
+    } else {
+      userLocation = null;
+      _userCountryName = '';
+      print('Location Perssmision Denied!');
     }
   }
 }
