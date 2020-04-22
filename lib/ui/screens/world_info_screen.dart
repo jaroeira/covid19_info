@@ -1,34 +1,63 @@
 import 'package:covid19_info/core/enums/view_state.dart';
 import 'package:covid19_info/core/viewmodels/world_cases_list_view_model.dart';
-import 'package:flutter/material.dart';
-import '../base_provider_view.dart';
-import 'package:covid19_info/ui/const.dart';
 import 'package:covid19_info/ui/widgets/widgets.dart';
+import 'package:flutter/material.dart';
 
-class HomeScreen extends StatelessWidget {
+import '../const.dart';
+
+class WorldInfoScreen extends StatelessWidget {
+  final WorldCasesListViewModel model;
+  final bool isRefreshing;
+
+  WorldInfoScreen({this.model, this.isRefreshing = false});
+
   @override
   Widget build(BuildContext context) {
-    return BaseProviderView<WorldCasesListViewModel>(
-      modelCallBack: (model) {
-        model.loadData();
-      },
-      builder: (context, model, child) => Scaffold(
-        appBar: AppBar(
-          backgroundColor: Colors.white,
-          title: Text(
-            'Covid-19 Info App',
-            style: kAppBarTextTitleStyle,
+    return _buildState(context, model);
+  }
+
+  Widget _buildState(BuildContext context, WorldCasesListViewModel model) {
+    switch (model.state) {
+      case ViewState.Busy:
+        return !isRefreshing
+            ? Container(
+                child: Center(child: CircularProgressIndicator()),
+                height: 400,
+              )
+            : Container();
+      case ViewState.Idle:
+        return _buildMainComponent(context, model);
+      case ViewState.Error:
+        return _buildErrorListView(model);
+      default:
+        return _buildErrorListView(model);
+    }
+  }
+
+  Widget _buildErrorListView(WorldCasesListViewModel model) {
+    return SizedBox(
+      height: 400,
+      width: double.infinity,
+      child: ListView(
+        children: <Widget>[
+          Container(
+            width: double.infinity,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Icon(Icons.update),
+                Text(
+                  'Error - Check your data connection',
+                  style: kLabelTextStyle,
+                ),
+                Text(
+                  'Pull to refresh',
+                  style: kLabelTextStyle,
+                ),
+              ],
+            ),
           ),
-        ),
-        body: RefreshIndicator(
-          onRefresh: () async {
-            await model.loadData();
-          },
-          child: SingleChildScrollView(
-            scrollDirection: Axis.vertical,
-            child: _buildState(context, model),
-          ),
-        ),
+        ],
       ),
     );
   }
@@ -202,72 +231,7 @@ class HomeScreen extends StatelessWidget {
             ),
           ),
           kDefaultVerticalSpacer,
-          FixedHeightContainer(
-            height: 300.0,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                kDefaultVerticalSpacer,
-                Text(
-                  'Other Country',
-                  style: kTitleTextStyle,
-                ),
-                kDefaultVerticalSpacer,
-                Expanded(
-                  child: VerticalListView(
-                    itemsList: model.countryInfoList,
-                  ),
-                ),
-              ],
-            ),
-          ),
         ],
-      ),
-    );
-  }
-
-  Widget _buildState(BuildContext context, WorldCasesListViewModel model) {
-    switch (model.state) {
-      case ViewState.Busy:
-        return Container(child: Center(child: CircularProgressIndicator()));
-      case ViewState.Idle:
-        return _buildMainComponent(context, model);
-      case ViewState.Error:
-        return _buildErrorListView(model);
-      default:
-        return _buildErrorListView(model);
-    }
-  }
-
-  Widget _buildErrorListView(WorldCasesListViewModel model) {
-    return RefreshIndicator(
-      onRefresh: () async {
-        await model.loadData();
-      },
-      child: SizedBox(
-        height: 400,
-        width: double.infinity,
-        child: ListView(
-          children: <Widget>[
-            Container(
-              width: double.infinity,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  Icon(Icons.update),
-                  Text(
-                    'Error - Check your data connection',
-                    style: kLabelTextStyle,
-                  ),
-                  Text(
-                    'Pull to refresh',
-                    style: kLabelTextStyle,
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
       ),
     );
   }

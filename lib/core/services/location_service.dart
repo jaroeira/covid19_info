@@ -29,6 +29,7 @@ class LocationService {
 
   Future<String> getPlaceForCurrentLocation() async {
     await _getCurrentLocation();
+
     List<Placemark> placemarkList =
         await locator.placemarkFromCoordinates(_latitude, _londitude);
 
@@ -39,7 +40,9 @@ class LocationService {
       print(
           'Placemark: country: ${placemark.country}, isoCountryCode: ${placemark.isoCountryCode} ');
 
-      return placemark.country != null ? placemark.country.toLowerCase() : '';
+      return placemark.isoCountryCode != null
+          ? placemark.isoCountryCode.toLowerCase()
+          : '';
     } else {
       return '';
     }

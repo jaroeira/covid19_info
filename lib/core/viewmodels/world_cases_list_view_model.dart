@@ -21,7 +21,7 @@ class WorldCasesListViewModel extends BaseModel {
   WorldInfo get worldInfo => _worldInfo;
 
   CountryInfo userLocation;
-  String _userCountryName = '';
+  String _userIsoCountryCode = '';
 
   //If there is a filter term return the filtered list else return the full list
   List<CountryInfo> get countryInfoList =>
@@ -42,7 +42,7 @@ class WorldCasesListViewModel extends BaseModel {
   }
 
   bool hasUserLocation() {
-    return userLocation != null && _userCountryName != '';
+    return userLocation != null && _userIsoCountryCode != '';
   }
 
   String _filterText = '';
@@ -113,18 +113,19 @@ class WorldCasesListViewModel extends BaseModel {
     if (await locationService.hasPermission()) {
       try {
         print('Location Perssmision Granted!');
-        _userCountryName = await locationService.getPlaceForCurrentLocation();
+        _userIsoCountryCode =
+            await locationService.getPlaceForCurrentLocation();
         userLocation = _countryInfoList.firstWhere(
-            (info) => info.name.toLowerCase() == _userCountryName,
+            (info) => info.isoCode.toLowerCase() == _userIsoCountryCode,
             orElse: () => null);
       } catch (e) {
         userLocation = null;
-        _userCountryName = '';
+        _userIsoCountryCode = '';
         print(e);
       }
     } else {
       userLocation = null;
-      _userCountryName = '';
+      _userIsoCountryCode = '';
       print('Location Perssmision Denied!');
     }
   }

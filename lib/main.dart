@@ -1,5 +1,5 @@
 import 'package:covid19_info/locator.dart';
-import 'package:covid19_info/ui/screens/HomeScreen.dart';
+import 'package:covid19_info/ui/screens/home_screen.dart';
 import 'package:flutter/material.dart';
 
 void main() {
