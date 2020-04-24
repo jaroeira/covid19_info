@@ -1,5 +1,3 @@
-import 'package:flutter/material.dart';
-
 class WorldInfo {
   final String totalCases;
   final String newCases;

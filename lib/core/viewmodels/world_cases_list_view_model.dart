@@ -95,7 +95,8 @@ class WorldCasesListViewModel extends BaseModel {
       //Sort Country List by name
       _countryInfoList.sort((a, b) => a.name.compareTo(b.name));
 
-      //_countryInfoList.forEach((country) => print(country));
+      // _countryInfoList.forEach((country) =>
+      //     print('cases: ${country.numberOfCases} Cases2: ${country.cases}'));
     } catch (e) {
       setState(ViewState.Error);
       throw e;

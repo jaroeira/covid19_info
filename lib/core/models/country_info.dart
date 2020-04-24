@@ -17,7 +17,11 @@ class CountryInfo {
       this.numberOfDeaths = '0',
       this.activeCases = '0',
       this.totalRecovered = '0',
-      this.recordDateString = ''});
+      this.recordDateString = '2019-12-20 00:00:00.000'});
+
+  DateTime get recordDate =>
+      DateTime.tryParse(recordDateString) ?? DateTime.now();
+  int get cases => int.tryParse(numberOfCases.replaceAll(',', ''));
 
   @override
   String toString() =>

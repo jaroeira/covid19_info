@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
@@ -74,11 +72,12 @@ class Covid19InfoRepository {
       final response = await _httpClient.get(uri, headers: headers);
       if (response.statusCode == 200) {
         jsonData = json.decode(response.body);
-        return jsonData;
       }
     } catch (err) {
       print(err);
       throw (err);
     }
+
+    return jsonData;
   }
 }

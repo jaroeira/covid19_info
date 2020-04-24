@@ -16,6 +16,7 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen>
     with SingleTickerProviderStateMixin {
   TabController _tabController;
+  ScrollController _scrollController = ScrollController();
 
   bool isRefreshing = false;
 
@@ -45,6 +46,7 @@ class _HomeScreenState extends State<HomeScreen>
             await model.loadData();
           },
           child: CustomScrollView(
+            controller: _scrollController,
             scrollDirection: Axis.vertical,
             slivers: <Widget>[
               SliverAppBar(
@@ -55,6 +57,17 @@ class _HomeScreenState extends State<HomeScreen>
                   'Covid-19 Info App',
                   style: kAppBarTitleStyle,
                 ),
+                actions: <Widget>[
+                  IconButton(
+                    icon: Icon(Icons.search),
+                    onPressed: () {
+                      _tabController.animateTo(1);
+                      _scrollController.animateTo(0.0,
+                          duration: Duration(milliseconds: 300),
+                          curve: Curves.easeOut);
+                    },
+                  ),
+                ],
               ),
               SliverList(
                 delegate: SliverChildListDelegate([

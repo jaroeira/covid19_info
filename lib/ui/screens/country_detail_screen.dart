@@ -1,9 +1,11 @@
+import 'package:covid19_info/core/enums/view_state.dart';
+import 'package:covid19_info/core/models/chart_data.dart';
 import 'package:covid19_info/core/models/country_info.dart';
 import 'package:flutter/material.dart';
 import 'package:covid19_info/core/viewmodels/country_detail_view_model.dart';
 import '../base_provider_view.dart';
 import '../const.dart';
-import 'package:charts_flutter/flutter.dart';
+import 'package:charts_flutter/flutter.dart' as charts;
 
 class CountryDetailScreen extends StatelessWidget {
   static const String id = 'CountryDetailScreen';
@@ -11,62 +13,6 @@ class CountryDetailScreen extends StatelessWidget {
   final CountryInfo info;
 
   CountryDetailScreen({this.info});
-
-  final List<SampleData> sampleDataList = [
-    SampleData(
-      cases: 12,
-      recordDate: DateTime.utc(2020, DateTime.january, 1),
-    ),
-    SampleData(
-      cases: 1000,
-      recordDate: DateTime.utc(2020, DateTime.february, 1),
-    ),
-    SampleData(
-      cases: 5000,
-      recordDate: DateTime.utc(2020, DateTime.march, 1),
-    ),
-    SampleData(
-      cases: 50000,
-      recordDate: DateTime.utc(2020, DateTime.april, 1),
-    ),
-    SampleData(
-      cases: 25000,
-      recordDate: DateTime.utc(2020, DateTime.may, 1),
-    ),
-    SampleData(
-      cases: 12,
-      recordDate: DateTime.utc(2020, DateTime.june, 1),
-    ),
-    SampleData(
-      cases: 1000,
-      recordDate: DateTime.utc(2020, DateTime.july, 1),
-    ),
-  ];
-
-  String getMonthAsString(int month) {
-    switch (month) {
-      case 1:
-        return 'Jan';
-      case 2:
-        return 'Fev';
-      case 3:
-        return 'Mar';
-      case 4:
-        return 'Apr';
-      case 5:
-        return 'May';
-      case 6:
-        return 'Jun';
-      case 7:
-        return 'Jul';
-      case 8:
-        return 'Aug';
-      case 9:
-        return 'Oct';
-      default:
-        return '';
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -166,11 +112,18 @@ class CountryDetailScreen extends StatelessWidget {
                   SizedBox(
                     height: 20,
                   ),
+                  Center(
+                    child: Text(
+                      'History of confirmed cases',
+                      style: kLabelTextStyle,
+                    ),
+                  ),
                   Container(
                     width: double.infinity,
                     height: 400,
                     child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 15),
+                      child: _buildChart(model),
                     ),
                   ),
                 ],
@@ -181,11 +134,31 @@ class CountryDetailScreen extends StatelessWidget {
       ),
     );
   }
-}
 
-class SampleData {
-  final int cases;
-  final DateTime recordDate;
+  Widget _buildChart(CountryDetailViewModel model) {
+    if (model.state == ViewState.Busy) {
+      return Center(child: CircularProgressIndicator());
+    } else if (model.dataList.length == 0) {
+      return Center(child: Text('No chart data available'));
+    } else {
+      return charts.TimeSeriesChart(
+        getChartDataList(model.dataList),
+        animate: true,
+        dateTimeFactory: charts.LocalDateTimeFactory(),
+      );
+    }
+  }
 
-  SampleData({this.cases, this.recordDate});
+  List<charts.Series<ChartData, DateTime>> getChartDataList(
+      List<ChartData> dataList) {
+    return [
+      charts.Series<ChartData, DateTime>(
+        id: 'Cases',
+        colorFn: (_, __) => charts.MaterialPalette.blue.shadeDefault,
+        domainFn: (ChartData data, _) => data.recordDate,
+        measureFn: (ChartData data, _) => data.cases,
+        data: dataList,
+      )
+    ];
+  }
 }
