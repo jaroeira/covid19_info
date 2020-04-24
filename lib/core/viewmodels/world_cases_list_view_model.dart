@@ -7,7 +7,7 @@ import 'package:covid19_info/core/viewmodels/base_view_model.dart';
 import 'package:covid19_info/locator.dart';
 
 class WorldCasesListViewModel extends BaseModel {
-  final repository = Covid19InfoRepository();
+  final repository = locator<Covid19InfoRepository>();
 
   //Contains all the data from the API
   List<CountryInfo> _countryInfoList = [];
@@ -79,6 +79,11 @@ class WorldCasesListViewModel extends BaseModel {
 
     try {
       Map<String, dynamic> jsonData = await repository.getCasesByCountry();
+
+      if (jsonData.length == 0) {
+        setState(ViewState.Error);
+        return;
+      }
 
       List<dynamic> countryListData = jsonData['countries_stat'];
       countryListData.forEach((jsonCountry) =>

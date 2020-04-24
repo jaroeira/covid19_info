@@ -1,6 +1,6 @@
 import 'package:covid19_info/core/models/country_info.dart';
-import 'package:covid19_info/core/viewmodels/world_cases_list_view_model.dart';
 import 'package:covid19_info/ui/const.dart';
+import 'package:covid19_info/ui/screens/country_detail_screen.dart';
 import 'package:flutter/material.dart';
 
 class FixedHeightContainer extends StatelessWidget {
@@ -38,18 +38,18 @@ class RoundCornerContainer extends StatelessWidget {
   Widget build(BuildContext context) {
     return SizedBox(
       height: height,
-      child: Container(
-        width: double.infinity,
-        decoration: BoxDecoration(
-          gradient: gradient,
-          color: color,
-          borderRadius: BorderRadius.circular(5.0),
+      child: Material(
+        color: color,
+        borderRadius: BorderRadius.circular(5),
+        elevation: 15,
+        child: Container(
+          width: double.infinity,
+          child: child != null
+              ? child
+              : Center(
+                  child: Text('Data'),
+                ),
         ),
-        child: child != null
-            ? child
-            : Center(
-                child: Text('Data'),
-              ),
       ),
     );
   }
@@ -95,7 +95,12 @@ class HorizontalListView extends StatelessWidget {
         itemBuilder: (context, index) {
           CountryInfo item = itemsList[index];
           return HorizontalCard(
+            height: 130,
             item: item,
+            onTap: () {
+              Navigator.pushNamed(context, CountryDetailScreen.id,
+                  arguments: item);
+            },
           );
         },
       ),
@@ -107,69 +112,75 @@ class HorizontalCard extends StatelessWidget {
   final CountryInfo item;
   final double width;
   final double height;
+  final Function onTap;
 
-  HorizontalCard({this.item, this.width = 200, this.height = 180});
+  HorizontalCard({this.item, this.width = 200, this.height = 180, this.onTap});
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      width: width,
-      height: height,
-      child: Card(
-        margin: EdgeInsets.symmetric(horizontal: 10.0),
-        child: Container(
-          width: 180,
-          padding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 5.0),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: <Widget>[
-              Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Image.asset(
-                    'images/flags/${item.isoCode.toLowerCase()}.png',
-                    height: 50.0,
-                    width: 50.0,
-                  ),
-                  SizedBox(height: 8.0),
-                  DotLabel(
-                    labelText: item.numberOfCases,
-                    dotColor: Colors.purple,
-                  ),
-                  SizedBox(height: 8.0),
-                  DotLabel(
-                    labelText: item.numberOfDeaths,
-                    dotColor: Colors.red,
-                  ),
-                ],
-              ),
-              SizedBox(
-                width: 20,
-              ),
-              Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Text(
-                    item.name,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                  SizedBox(
-                    height: 5.0,
-                  ),
-                  DotLabel(
-                    labelText: item.activeCases,
-                    dotColor: Colors.yellow,
-                  ),
-                  SizedBox(height: 8.0),
-                  DotLabel(
-                    labelText: item.totalRecovered,
-                    dotColor: Colors.green,
-                  ),
-                ],
-              ),
-            ],
+    return GestureDetector(
+      onTap: onTap,
+      child: SizedBox(
+        width: width,
+        height: height,
+        child: Card(
+          color: kHorizontalCardColor,
+          margin: EdgeInsets.symmetric(horizontal: 10.0),
+          child: Container(
+            width: 180,
+            padding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 5.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: <Widget>[
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Image.asset(
+                      'images/flags/${item.isoCode.toLowerCase()}.png',
+                      height: 50.0,
+                      width: 50.0,
+                    ),
+                    SizedBox(height: 8.0),
+                    DotLabel(
+                      labelText: item.numberOfCases,
+                      dotColor: Colors.purple,
+                    ),
+                    SizedBox(height: 8.0),
+                    DotLabel(
+                      labelText: item.numberOfDeaths,
+                      dotColor: Colors.red,
+                    ),
+                  ],
+                ),
+                SizedBox(
+                  width: 20,
+                ),
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Text(
+                      item.name,
+                      overflow: TextOverflow.ellipsis,
+                      style: kLabelTextStyle,
+                    ),
+                    SizedBox(
+                      height: 5.0,
+                    ),
+                    DotLabel(
+                      labelText: item.activeCases,
+                      dotColor: Colors.yellow,
+                    ),
+                    SizedBox(height: 8.0),
+                    DotLabel(
+                      labelText: item.totalRecovered,
+                      dotColor: Colors.green,
+                    ),
+                  ],
+                ),
+              ],
+            ),
           ),
         ),
       ),
@@ -190,7 +201,13 @@ class VerticalListView extends StatelessWidget {
         itemCount: itemsList.length,
         itemBuilder: (context, index) {
           final item = itemsList[index];
-          return VerticalCard(item: item);
+          return VerticalCard(
+            item: item,
+            onTap: () {
+              Navigator.pushNamed(context, CountryDetailScreen.id,
+                  arguments: item);
+            },
+          );
         },
       ),
     );
@@ -199,89 +216,121 @@ class VerticalListView extends StatelessWidget {
 
 class VerticalCard extends StatelessWidget {
   final CountryInfo item;
+  final Function onTap;
 
-  VerticalCard({this.item});
+  VerticalCard({this.item, this.onTap});
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      child: Container(
-        height: 80,
-        margin: EdgeInsets.symmetric(horizontal: 5.0),
-        padding: EdgeInsets.symmetric(horizontal: 8.0, vertical: 10.0),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: <Widget>[
-            Expanded(
-              flex: 2,
-              child: Container(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    Image.asset(
-                      'images/flags/${item.isoCode.toLowerCase()}.png',
-                      height: 40.0,
-                      width: 40.0,
-                    ),
-                    SizedBox(
-                      height: 2.0,
-                    ),
-                    Text(
-                      item.name,
-                      overflow: TextOverflow.ellipsis,
-                      style: kLabelTextStyle,
-                    ),
-                  ],
+    return GestureDetector(
+      onTap: onTap,
+      child: Card(
+        color: kVerticalCardColor,
+        child: Container(
+          height: 80,
+          margin: EdgeInsets.symmetric(horizontal: 5.0),
+          padding: EdgeInsets.symmetric(horizontal: 8.0, vertical: 10.0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              Expanded(
+                flex: 2,
+                child: Container(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Image.asset(
+                        'images/flags/${item.isoCode.toLowerCase()}.png',
+                        height: 40.0,
+                        width: 40.0,
+                      ),
+                      SizedBox(
+                        height: 2.0,
+                      ),
+                      Text(
+                        item.name,
+                        overflow: TextOverflow.ellipsis,
+                        style: kLabelTextStyle,
+                      ),
+                    ],
+                  ),
                 ),
               ),
-            ),
-            Expanded(
-              flex: 5,
-              child: Container(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: <Widget>[
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        DotLabel(
-                          labelText: item.numberOfCases,
-                          dotColor: Colors.purple,
-                        ),
-                        SizedBox(
-                          height: 5.0,
-                        ),
-                        DotLabel(
-                          labelText: item.numberOfDeaths,
-                          dotColor: Colors.red,
-                        ),
-                      ],
-                    ),
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        DotLabel(
-                          labelText: item.activeCases,
-                          dotColor: Colors.yellow,
-                        ),
-                        SizedBox(
-                          height: 5.0,
-                        ),
-                        DotLabel(
-                          labelText: item.totalRecovered,
-                          dotColor: Colors.green,
-                        ),
-                      ],
-                    ),
-                  ],
+              Expanded(
+                flex: 5,
+                child: Container(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: <Widget>[
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          DotLabel(
+                            labelText: item.numberOfCases,
+                            dotColor: Colors.purple,
+                          ),
+                          SizedBox(
+                            height: 5.0,
+                          ),
+                          DotLabel(
+                            labelText: item.numberOfDeaths,
+                            dotColor: Colors.red,
+                          ),
+                        ],
+                      ),
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          DotLabel(
+                            labelText: item.activeCases,
+                            dotColor: Colors.yellow,
+                          ),
+                          SizedBox(
+                            height: 5.0,
+                          ),
+                          DotLabel(
+                            labelText: item.totalRecovered,
+                            dotColor: Colors.green,
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
+    );
+  }
+}
+
+class DescriptionLabelRow extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      children: <Widget>[
+        DotLabel(
+          labelText: 'Cases',
+          dotColor: Colors.purple,
+        ),
+        DotLabel(
+          labelText: 'Deaths',
+          dotColor: Colors.red,
+        ),
+        DotLabel(
+          labelText: 'Active',
+          dotColor: Colors.yellow,
+        ),
+        DotLabel(
+          labelText: 'Recovered',
+          dotColor: Colors.green,
+        ),
+      ],
     );
   }
 }

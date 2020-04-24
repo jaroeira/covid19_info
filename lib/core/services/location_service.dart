@@ -3,8 +3,7 @@ import 'package:geolocator/geolocator.dart';
 class LocationService {
   Geolocator locator = Geolocator();
 
-  double _latitude = 0.0;
-  double _londitude = 0.0;
+  Position _position;
 
   Future<bool> hasPermission() async {
     try {
@@ -18,10 +17,8 @@ class LocationService {
 
   Future<void> _getCurrentLocation() async {
     try {
-      Position position = await locator.getCurrentPosition(
+      _position = await locator.getCurrentPosition(
           desiredAccuracy: LocationAccuracy.lowest);
-      _latitude = position.latitude;
-      _londitude = position.longitude;
     } catch (e) {
       throw e;
     }
@@ -30,8 +27,9 @@ class LocationService {
   Future<String> getPlaceForCurrentLocation() async {
     await _getCurrentLocation();
 
-    List<Placemark> placemarkList =
-        await locator.placemarkFromCoordinates(_latitude, _londitude);
+    List<Placemark> placemarkList = await locator
+        .placemarkFromPosition(_position)
+        .timeout(Duration(seconds: 5));
 
     if (placemarkList.length > 0) {
       print('placemarkList.length ${placemarkList.length}');

@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
@@ -8,6 +10,9 @@ class Covid19InfoRepository {
       'cases_by_country.php';
 
   static const String _api_get_world_total_stat_endpoint = 'worldstat.php';
+
+  static const String _api_history_by_particular_country =
+      'cases_by_particular_country.php';
 
   static const Map<String, String> headers = {
     'x-rapidapi-host': 'coronavirus-monitor.p.rapidapi.com',
@@ -29,6 +34,7 @@ class Covid19InfoRepository {
         jsonData = json.decode(response.body);
       }
     } catch (err) {
+      print(err);
       throw (err);
     }
 
@@ -53,5 +59,26 @@ class Covid19InfoRepository {
 
   void dispose() {
     _httpClient.close();
+  }
+
+  Future<Map<String, dynamic>> getHistoryByParticularCountry(
+      String countryName) async {
+    final uri = Uri.https(
+        'coronavirus-monitor.p.rapidapi.com',
+        '/coronavirus/$_api_history_by_particular_country',
+        {'country': countryName});
+
+    Map<String, dynamic> jsonData = {};
+
+    try {
+      final response = await _httpClient.get(uri, headers: headers);
+      if (response.statusCode == 200) {
+        jsonData = json.decode(response.body);
+        return jsonData;
+      }
+    } catch (err) {
+      print(err);
+      throw (err);
+    }
   }
 }

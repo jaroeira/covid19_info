@@ -4,8 +4,11 @@ import 'package:covid19_info/ui/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 
 import '../const.dart';
+import 'country_detail_screen.dart';
 
 class WorldInfoScreen extends StatelessWidget {
+  static const String id = 'WorldInfoScreen';
+
   final WorldCasesListViewModel model;
   final bool isRefreshing;
 
@@ -65,6 +68,7 @@ class WorldInfoScreen extends StatelessWidget {
   Widget _buildMainComponent(
       BuildContext context, WorldCasesListViewModel model) {
     return Container(
+      //color: kPrimaryColor,
       padding: EdgeInsets.all(8.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -95,12 +99,7 @@ class WorldInfoScreen extends StatelessWidget {
               children: <Widget>[
                 RoundCornerContainer(
                   height: 80.0,
-                  gradient: LinearGradient(
-                    colors: const [
-                      Color(0xFFF2C64C),
-                      Color(0xFFF29C4A),
-                    ],
-                  ),
+                  color: kAccentColor,
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.center,
@@ -124,10 +123,7 @@ class WorldInfoScreen extends StatelessWidget {
                   children: <Widget>[
                     Expanded(
                       child: RoundCornerContainer(
-                        gradient: LinearGradient(colors: const [
-                          Color(0xFF190807),
-                          Color(0xFFD04435),
-                        ]),
+                        color: kAccentColor,
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: <Widget>[
@@ -146,10 +142,7 @@ class WorldInfoScreen extends StatelessWidget {
                     kDefaultHorizontallSpacer,
                     Expanded(
                       child: RoundCornerContainer(
-                        gradient: LinearGradient(colors: const [
-                          Color(0xFF37935D),
-                          Color(0xFF53B1C7),
-                        ]),
+                        color: kAccentColor,
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: <Widget>[
@@ -171,6 +164,8 @@ class WorldInfoScreen extends StatelessWidget {
             ),
           ),
           kDefaultVerticalSpacer,
+          DescriptionLabelRow(),
+          kDefaultVerticalSpacer,
           model.hasUserLocation()
               ? FixedHeightContainer(
                   height: 180,
@@ -187,41 +182,23 @@ class WorldInfoScreen extends StatelessWidget {
                       HorizontalCard(
                         height: 130,
                         item: model.userLocation,
+                        onTap: () {
+                          Navigator.pushNamed(context, CountryDetailScreen.id,
+                              arguments: model.userLocation);
+                        },
                       ),
                     ],
                   ),
                 )
               : Container(),
           FixedHeightContainer(
-            height: 185,
+            height: 165,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 Text(
                   'Top Country',
                   style: kTitleTextStyle,
-                ),
-                kDefaultVerticalSpacer,
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: <Widget>[
-                    DotLabel(
-                      labelText: 'Cases',
-                      dotColor: Colors.purple,
-                    ),
-                    DotLabel(
-                      labelText: 'Deaths',
-                      dotColor: Colors.red,
-                    ),
-                    DotLabel(
-                      labelText: 'Active',
-                      dotColor: Colors.yellow,
-                    ),
-                    DotLabel(
-                      labelText: 'Recovered',
-                      dotColor: Colors.green,
-                    ),
-                  ],
                 ),
                 kDefaultVerticalSpacer,
                 HorizontalListView(

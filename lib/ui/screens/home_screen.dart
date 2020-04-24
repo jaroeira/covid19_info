@@ -7,6 +7,8 @@ import '../base_provider_view.dart';
 import 'package:covid19_info/ui/const.dart';
 
 class HomeScreen extends StatefulWidget {
+  static const String id = 'HomeScreen';
+
   @override
   _HomeScreenState createState() => _HomeScreenState();
 }
@@ -32,32 +34,33 @@ class _HomeScreenState extends State<HomeScreen>
   @override
   Widget build(BuildContext context) {
     return BaseProviderView<WorldCasesListViewModel>(
-      modelCallBack: (model) {
-        isRefreshing = true;
-        model.loadData();
+      modelCallBack: (model) async {
+        await model.loadData();
       },
       builder: (context, model, child) => Scaffold(
         body: RefreshIndicator(
           displacement: 400,
           onRefresh: () async {
+            isRefreshing = true;
             await model.loadData();
           },
           child: CustomScrollView(
             scrollDirection: Axis.vertical,
             slivers: <Widget>[
               SliverAppBar(
-                backgroundColor: Colors.white,
+                //backgroundColor: Colors.white,
                 floating: true,
+                pinned: true,
                 title: Text(
                   'Covid-19 Info App',
-                  style: kAppBarTextTitleStyle,
+                  style: kAppBarTitleStyle,
                 ),
               ),
               SliverList(
                 delegate: SliverChildListDelegate([
                   Container(
                     width: double.infinity,
-                    height: MediaQuery.of(context).size.height,
+                    height: MediaQuery.of(context).size.height - 190,
                     child: TabBarView(
                       controller: _tabController,
                       children: <Widget>[
@@ -84,12 +87,11 @@ class _HomeScreenState extends State<HomeScreen>
   Widget _buildBottomBar() {
     return BottomAppBar(
       shape: CircularNotchedRectangle(),
-      color: Colors.white,
+      color: kPrimaryColor,
       elevation: 9.0,
       child: Container(
-        height: 70.0,
+        height: 61.0,
         decoration: BoxDecoration(
-          color: Colors.white,
           borderRadius: BorderRadius.only(
             topLeft: Radius.circular(25.0),
             topRight: Radius.circular(25.0),
@@ -97,8 +99,8 @@ class _HomeScreenState extends State<HomeScreen>
         ),
         child: TabBar(
           indicatorColor: Colors.transparent,
-          labelColor: Colors.black,
-          unselectedLabelColor: Color(0xFFCDCDCD),
+          labelColor: kTextIconColor,
+          unselectedLabelColor: kAccentColor,
           controller: _tabController,
           tabs: <Widget>[
             _buildTab(FontAwesomeIcons.globe, 'World'),
@@ -110,15 +112,21 @@ class _HomeScreenState extends State<HomeScreen>
   }
 
   Widget _buildTab(IconData iconData, String labelText) {
-    return Tab(
-      child: Column(
-        children: <Widget>[
-          Icon(iconData),
-          SizedBox(
-            height: 5.0,
-          ),
-          Text(labelText),
-        ],
+    return Padding(
+      padding: const EdgeInsets.only(top: 8.0),
+      child: Tab(
+        child: Column(
+          children: <Widget>[
+            Icon(iconData),
+            SizedBox(
+              height: 5.0,
+            ),
+            Text(
+              labelText,
+              style: kTabBarLabelTextStyle,
+            ),
+          ],
+        ),
       ),
     );
   }
