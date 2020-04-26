@@ -120,7 +120,7 @@ class HorizontalCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: onTap,
-      child: SizedBox(
+      child: Container(
         width: width,
         height: height,
         child: Card(
@@ -227,77 +227,82 @@ class VerticalCard extends StatelessWidget {
       child: Card(
         color: kVerticalCardColor,
         child: Container(
-          height: 80,
+          height: 85,
           margin: EdgeInsets.symmetric(horizontal: 5.0),
           padding: EdgeInsets.symmetric(horizontal: 8.0, vertical: 10.0),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              Expanded(
-                flex: 2,
-                child: Container(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      Image.asset(
-                        'images/flags/${item.isoCode.toLowerCase()}.png',
-                        height: 40.0,
-                        width: 40.0,
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  Expanded(
+                    flex: 1,
+                    child: Container(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          Image.asset(
+                            'images/flags/${item.isoCode.toLowerCase()}.png',
+                            height: 40.0,
+                            width: 40.0,
+                          ),
+                        ],
                       ),
-                      SizedBox(
-                        height: 2.0,
-                      ),
-                      Text(
-                        item.name,
-                        overflow: TextOverflow.ellipsis,
-                        style: kLabelTextStyle,
-                      ),
-                    ],
+                    ),
                   ),
-                ),
+                  Expanded(
+                    flex: 5,
+                    child: Container(
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: <Widget>[
+                          Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              DotLabel(
+                                labelText: item.numberOfCases,
+                                dotColor: Colors.purple,
+                              ),
+                              SizedBox(
+                                height: 5.0,
+                              ),
+                              DotLabel(
+                                labelText: item.numberOfDeaths,
+                                dotColor: Colors.red,
+                              ),
+                            ],
+                          ),
+                          Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              DotLabel(
+                                labelText: item.activeCases,
+                                dotColor: Colors.yellow,
+                              ),
+                              SizedBox(
+                                height: 5.0,
+                              ),
+                              DotLabel(
+                                labelText: item.totalRecovered,
+                                dotColor: Colors.green,
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
               ),
-              Expanded(
-                flex: 5,
-                child: Container(
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: <Widget>[
-                      Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          DotLabel(
-                            labelText: item.numberOfCases,
-                            dotColor: Colors.purple,
-                          ),
-                          SizedBox(
-                            height: 5.0,
-                          ),
-                          DotLabel(
-                            labelText: item.numberOfDeaths,
-                            dotColor: Colors.red,
-                          ),
-                        ],
-                      ),
-                      Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          DotLabel(
-                            labelText: item.activeCases,
-                            dotColor: Colors.yellow,
-                          ),
-                          SizedBox(
-                            height: 5.0,
-                          ),
-                          DotLabel(
-                            labelText: item.totalRecovered,
-                            dotColor: Colors.green,
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
+              Padding(
+                padding: const EdgeInsets.only(left: 5.0),
+                child: Text(
+                  item.name,
+                  overflow: TextOverflow.ellipsis,
+                  style: kLabelTextStyle,
                 ),
               ),
             ],
