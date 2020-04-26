@@ -28,13 +28,13 @@ const kDefaultHorizontallSpacer = SizedBox(
 
 const kBigPanelTextSyle = TextStyle(
   fontFamily: 'Muli',
-  color: kLightTextColor,
+  color: Colors.purple,
   fontSize: 18.0,
 );
 
 const kSmalPanelTextStyle = TextStyle(
   fontFamily: 'Muli',
-  color: kLightTextColor,
+  color: kSecondaryTextColor,
   fontSize: 15.0,
 );
 
@@ -61,7 +61,8 @@ const kSearchTextFieldtDecoration = InputDecoration(
 );
 
 //Colors
-const kPrimaryColor = Color(0xFF607D8B);
+const kPrimaryColor = Color(0xFF396981);
+//const kPrimaryColor = Color(0xFF607D8B);
 const kAccentColor = Color(0xFF9E9E9E);
 
 const kDarkPrimaryColor = Color(0xFF455A64);

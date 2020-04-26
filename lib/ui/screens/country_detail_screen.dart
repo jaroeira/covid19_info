@@ -7,7 +7,14 @@ import '../base_provider_view.dart';
 import '../const.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
 
-class CountryDetailScreen extends StatelessWidget {
+enum ChartSerieType {
+  TotalCases,
+  TotalDeaths,
+  TotalRecovered,
+  NewCases,
+}
+
+class CountryDetailScreen extends StatefulWidget {
   static const String id = 'CountryDetailScreen';
 
   final CountryInfo info;
@@ -15,10 +22,24 @@ class CountryDetailScreen extends StatelessWidget {
   CountryDetailScreen({this.info});
 
   @override
+  _CountryDetailScreenState createState() => _CountryDetailScreenState();
+}
+
+class _CountryDetailScreenState extends State<CountryDetailScreen>
+    with SingleTickerProviderStateMixin {
+  TabController _tabController;
+
+  @override
+  void initState() {
+    super.initState();
+    _tabController = TabController(length: 4, vsync: this);
+  }
+
+  @override
   Widget build(BuildContext context) {
     return BaseProviderView<CountryDetailViewModel>(
       modelCallBack: (model) async {
-        model.loadData(countryName: info.name);
+        model.loadData(countryName: widget.info.name);
       },
       builder: (context, model, child) => Scaffold(
         //backgroundColor: kPrimaryColor,
@@ -58,7 +79,7 @@ class CountryDetailScreen extends StatelessWidget {
                                   width: 5.0,
                                 ),
                                 Text(
-                                  info.name,
+                                  widget.info.name,
                                   style: kTitleTextStyle,
                                   overflow: TextOverflow.ellipsis,
                                 ),
@@ -67,7 +88,7 @@ class CountryDetailScreen extends StatelessWidget {
                             Row(
                               children: <Widget>[
                                 Image.asset(
-                                  'images/flags/${info.isoCode.toLowerCase()}.png',
+                                  'images/flags/${widget.info.isoCode.toLowerCase()}.png',
                                   width: 128,
                                   height: 128,
                                 ),
@@ -75,25 +96,25 @@ class CountryDetailScreen extends StatelessWidget {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: <Widget>[
                                     Text(
-                                      'Confirmed cases: ${info.numberOfCases}',
+                                      'Confirmed cases: ${widget.info.numberOfCases}',
                                       style: kLabelTextStyle.copyWith(
                                           fontWeight: FontWeight.bold),
                                     ),
                                     kDefaultVerticalSpacer,
                                     Text(
-                                      'Confirmed deaths: ${info.numberOfDeaths}',
+                                      'Confirmed deaths: ${widget.info.numberOfDeaths}',
                                       style: kLabelTextStyle.copyWith(
                                           fontWeight: FontWeight.bold),
                                     ),
                                     kDefaultVerticalSpacer,
                                     Text(
-                                      'Recovered: ${info.totalRecovered}',
+                                      'Recovered: ${widget.info.totalRecovered}',
                                       style: kLabelTextStyle.copyWith(
                                           fontWeight: FontWeight.bold),
                                     ),
                                     kDefaultVerticalSpacer,
                                     Text(
-                                      'Active cases: ${info.activeCases}',
+                                      'Active cases: ${widget.info.activeCases}',
                                       style: kLabelTextStyle.copyWith(
                                           fontWeight: FontWeight.bold),
                                     ),
@@ -112,18 +133,67 @@ class CountryDetailScreen extends StatelessWidget {
                   SizedBox(
                     height: 20,
                   ),
-                  Center(
-                    child: Text(
-                      'History of confirmed cases',
-                      style: kLabelTextStyle,
+                  Container(
+                    width: double.infinity,
+                    child: Center(
+                      child: TabBar(
+                        controller: _tabController,
+                        indicatorColor: kAccentColor,
+                        isScrollable: true,
+                        labelColor: kTextIconColor,
+                        unselectedLabelColor: kAccentColor,
+                        tabs: <Widget>[
+                          Tab(
+                            child: Text(
+                              'Total Cases',
+                              style: kLabelTextStyle,
+                            ),
+                          ),
+                          Tab(
+                            child: Text(
+                              'Total Deaths',
+                              style: kLabelTextStyle,
+                            ),
+                          ),
+                          Tab(
+                            child: Text(
+                              'Total Recovered',
+                              style: kLabelTextStyle,
+                            ),
+                          ),
+                          Tab(
+                            child: Text(
+                              'New Cases',
+                              style: kLabelTextStyle,
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                   Container(
                     width: double.infinity,
                     height: 400,
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 15),
-                      child: _buildChart(model),
+                    child: TabBarView(
+                      controller: _tabController,
+                      children: <Widget>[
+                        ChartNumbersByCase(
+                          model: model,
+                          type: ChartSerieType.TotalCases,
+                        ),
+                        ChartNumbersByCase(
+                          model: model,
+                          type: ChartSerieType.TotalDeaths,
+                        ),
+                        ChartNumbersByCase(
+                          model: model,
+                          type: ChartSerieType.TotalRecovered,
+                        ),
+                        ChartNumbersByCase(
+                          model: model,
+                          type: ChartSerieType.NewCases,
+                        ),
+                      ],
                     ),
                   ),
                 ],
@@ -134,15 +204,34 @@ class CountryDetailScreen extends StatelessWidget {
       ),
     );
   }
+}
 
-  Widget _buildChart(CountryDetailViewModel model) {
+class ChartNumbersByCase extends StatelessWidget {
+  final CountryDetailViewModel model;
+  final ChartSerieType type;
+
+  ChartNumbersByCase({@required this.model, @required this.type});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      height: 400,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 15),
+        child: _buildChart(model, type),
+      ),
+    );
+  }
+
+  Widget _buildChart(CountryDetailViewModel model, ChartSerieType type) {
     if (model.state == ViewState.Busy) {
       return Center(child: CircularProgressIndicator());
     } else if (model.dataList.length == 0) {
       return Center(child: Text('No chart data available'));
     } else {
       return charts.TimeSeriesChart(
-        getChartDataList(model.dataList),
+        getChartDataList(model.dataList, type),
         animate: true,
         dateTimeFactory: charts.LocalDateTimeFactory(),
       );
@@ -150,15 +239,38 @@ class CountryDetailScreen extends StatelessWidget {
   }
 
   List<charts.Series<ChartData, DateTime>> getChartDataList(
-      List<ChartData> dataList) {
-    return [
-      charts.Series<ChartData, DateTime>(
-        id: 'Cases',
-        colorFn: (_, __) => charts.MaterialPalette.blue.shadeDefault,
+      List<ChartData> dataList, ChartSerieType type) {
+    Map<ChartSerieType, charts.Series<ChartData, DateTime>> chartSeries = {
+      ChartSerieType.TotalCases: charts.Series<ChartData, DateTime>(
+        id: 'totalCases',
+        colorFn: (_, __) => charts.MaterialPalette.purple.shadeDefault,
         domainFn: (ChartData data, _) => data.recordDate,
         measureFn: (ChartData data, _) => data.cases,
         data: dataList,
+      ),
+      ChartSerieType.TotalDeaths: charts.Series<ChartData, DateTime>(
+        id: 'totalDeaths',
+        colorFn: (_, __) => charts.MaterialPalette.red.shadeDefault,
+        domainFn: (ChartData data, _) => data.recordDate,
+        measureFn: (ChartData data, _) => data.totalDeaths,
+        data: dataList,
+      ),
+      ChartSerieType.TotalRecovered: charts.Series<ChartData, DateTime>(
+        id: 'totalRecovered',
+        colorFn: (_, __) => charts.MaterialPalette.teal.shadeDefault,
+        domainFn: (ChartData data, _) => data.recordDate,
+        measureFn: (ChartData data, _) => data.totalRecovered,
+        data: dataList,
+      ),
+      ChartSerieType.NewCases: charts.Series<ChartData, DateTime>(
+        id: 'newCases',
+        colorFn: (_, __) => charts.MaterialPalette.deepOrange.shadeDefault,
+        domainFn: (ChartData data, _) => data.recordDate,
+        measureFn: (ChartData data, _) => data.newCases,
+        data: dataList,
       )
-    ];
+    };
+
+    return [chartSeries[type]];
   }
 }

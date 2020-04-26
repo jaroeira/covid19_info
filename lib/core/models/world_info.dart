@@ -1,3 +1,12 @@
+const wiTotalCasesJsonKey = 'total_cases';
+const wiNewCasesJsonKey = 'new_cases';
+const wiNewDeathsJsonKey = 'new_deaths';
+const wiTotalDeathsJsonKey = 'total_deaths';
+const wiTotalRecoveredJsonKey = 'total_recovered';
+const wiActiveCasesJsonKey = 'active_cases';
+const wiSeriousCriticalJsonKey = 'serious_critical';
+const wiStatisticTakenAtJsonKey = 'statistic_taken_at';
+
 class WorldInfo {
   final String totalCases;
   final String newCases;
@@ -30,14 +39,14 @@ class WorldInfo {
 
   factory WorldInfo.fromJson(Map<String, dynamic> json) {
     return WorldInfo(
-      totalCases: json['total_cases'] as String,
-      newCases: json['new_cases'] as String,
-      totalDeaths: json['total_deaths'] as String,
-      newDeaths: json['new_deaths'] as String,
-      totalRecovered: json['total_recovered'] as String,
-      activeCases: json['active_cases'] as String,
-      seriousCritical: json['serious_critical'] as String,
-      statisticTakenAt: DateTime.tryParse(json['statistic_taken_at']),
+      totalCases: json[wiTotalCasesJsonKey] as String,
+      newCases: json[wiNewCasesJsonKey] as String,
+      totalDeaths: json[wiTotalDeathsJsonKey] as String,
+      newDeaths: json[wiNewDeathsJsonKey] as String,
+      totalRecovered: json[wiTotalRecoveredJsonKey] as String,
+      activeCases: json[wiActiveCasesJsonKey] as String,
+      seriousCritical: json[wiSeriousCriticalJsonKey] as String,
+      statisticTakenAt: DateTime.tryParse(json[wiStatisticTakenAtJsonKey]),
     );
   }
 }

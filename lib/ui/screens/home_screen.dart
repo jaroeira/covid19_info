@@ -73,7 +73,7 @@ class _HomeScreenState extends State<HomeScreen>
                 delegate: SliverChildListDelegate([
                   Container(
                     width: double.infinity,
-                    height: MediaQuery.of(context).size.height - 190,
+                    height: MediaQuery.of(context).size.height - 120,
                     child: TabBarView(
                       controller: _tabController,
                       children: <Widget>[
@@ -115,6 +115,12 @@ class _HomeScreenState extends State<HomeScreen>
           labelColor: kTextIconColor,
           unselectedLabelColor: kAccentColor,
           controller: _tabController,
+          onTap: (index) {
+            if (index == 1) {
+              _scrollController.animateTo(0.0,
+                  duration: Duration(milliseconds: 300), curve: Curves.easeOut);
+            }
+          },
           tabs: <Widget>[
             _buildTab(FontAwesomeIcons.globe, 'World'),
             _buildTab(FontAwesomeIcons.list, 'Cases by country'),

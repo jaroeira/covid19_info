@@ -1,6 +1,13 @@
 import 'package:flutter/material.dart';
 import 'map_country_to_iso.dart';
 
+const ciNameJsonKey = 'country_name';
+const ciNumberOfCasesJsonKey = 'cases';
+const ciNumberOfDeathsJsonKey = 'deaths';
+const ciTotalRecoveredJsonKey = 'total_recovered';
+const ciActiveCasesJsonKey = 'active_cases';
+const ciRecordDateStringJsonKey = 'record_date';
+
 class CountryInfo {
   final String name;
   final String isoCode;
@@ -29,12 +36,12 @@ class CountryInfo {
 
   factory CountryInfo.fromJson(Map<String, dynamic> json) {
     return CountryInfo(
-        name: json['country_name'] as String,
-        isoCode: mapCountryToIso[json['country_name']] ?? 'XX',
-        numberOfCases: json['cases'] as String,
-        numberOfDeaths: json['deaths'] as String,
-        totalRecovered: json['total_recovered'] as String,
-        activeCases: json['active_cases'] as String,
-        recordDateString: json['record_date'] as String ?? '');
+        name: json[ciNameJsonKey] as String,
+        isoCode: mapCountryToIso[json[ciNameJsonKey]] ?? 'XX',
+        numberOfCases: json[ciNumberOfCasesJsonKey] as String,
+        numberOfDeaths: json[ciNumberOfDeathsJsonKey] as String,
+        totalRecovered: json[ciTotalRecoveredJsonKey] as String,
+        activeCases: json[ciActiveCasesJsonKey] as String,
+        recordDateString: json[ciRecordDateStringJsonKey] as String ?? '');
   }
 }

@@ -83,7 +83,7 @@ class WorldInfoScreen extends StatelessWidget {
                   style: kTitleTextStyle,
                 ),
                 Text(
-                  'Confirmed, death, recovered and active',
+                  'Confirmed, death, recovered and active Covid-19 cases',
                   style: kLabelTextStyle,
                 ),
                 Text(
@@ -93,77 +93,9 @@ class WorldInfoScreen extends StatelessWidget {
               ],
             ),
           ),
-          FixedHeightContainer(
-            height: 155,
-            child: Column(
-              children: <Widget>[
-                RoundCornerContainer(
-                  height: 80.0,
-                  color: kAccentColor,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: <Widget>[
-                      Text(
-                        model.worldInfo.totalCases,
-                        style: kBigPanelTextSyle.copyWith(
-                            fontSize: 30.0, fontWeight: FontWeight.w900),
-                      ),
-                      kDefaultVerticalSpacer,
-                      Text(
-                        'Confirmed Cases',
-                        style: kBigPanelTextSyle,
-                      ),
-                    ],
-                  ),
-                ),
-                kDefaultVerticalSpacer,
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: <Widget>[
-                    Expanded(
-                      child: RoundCornerContainer(
-                        color: kAccentColor,
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: <Widget>[
-                            Text(
-                              model.worldInfo.totalDeaths,
-                              style: kSmalPanelTextStyle,
-                            ),
-                            Text(
-                              'Deaths',
-                              style: kSmalPanelTextStyle,
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                    kDefaultHorizontallSpacer,
-                    Expanded(
-                      child: RoundCornerContainer(
-                        color: kAccentColor,
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: <Widget>[
-                            Text(
-                              model.worldInfo.totalRecovered,
-                              style: kSmalPanelTextStyle,
-                            ),
-                            Text(
-                              'Recovered',
-                              style: kSmalPanelTextStyle,
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ],
-            ),
+          WorldInfoPanel(
+            model: model,
           ),
-          kDefaultVerticalSpacer,
           DescriptionLabelRow(),
           kDefaultVerticalSpacer,
           model.hasUserLocation()
@@ -208,6 +140,85 @@ class WorldInfoScreen extends StatelessWidget {
             ),
           ),
           kDefaultVerticalSpacer,
+        ],
+      ),
+    );
+  }
+}
+
+class WorldInfoPanel extends StatelessWidget {
+  final WorldCasesListViewModel model;
+
+  WorldInfoPanel({this.model});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: 220,
+      width: double.infinity,
+      child: Column(
+        children: <Widget>[
+          Container(
+            width: double.infinity,
+            height: 155,
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage('images/world_map.png'),
+                fit: BoxFit.cover,
+              ),
+            ),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Text(
+                  model.worldInfo.totalCases,
+                  style: kBigPanelTextSyle.copyWith(
+                      fontSize: 30.0, fontWeight: FontWeight.w900),
+                ),
+                kDefaultVerticalSpacer,
+                Text(
+                  'Confirmed Cases',
+                  style: kBigPanelTextSyle,
+                ),
+              ],
+            ),
+          ),
+          SizedBox(
+            height: 15,
+          ),
+          Container(
+            height: 50,
+            width: double.infinity,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: <Widget>[
+                Column(
+                  children: <Widget>[
+                    Text(
+                      model.worldInfo.totalDeaths,
+                      style: kSmalPanelTextStyle.copyWith(color: Colors.red),
+                    ),
+                    Text(
+                      'Deaths',
+                      style: kSmalPanelTextStyle,
+                    ),
+                  ],
+                ),
+                Column(
+                  children: <Widget>[
+                    Text(
+                      model.worldInfo.totalRecovered,
+                      style: kSmalPanelTextStyle.copyWith(color: Colors.green),
+                    ),
+                    Text(
+                      'Recovered',
+                      style: kSmalPanelTextStyle,
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
         ],
       ),
     );
