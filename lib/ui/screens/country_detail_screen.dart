@@ -42,13 +42,12 @@ class _CountryDetailScreenState extends State<CountryDetailScreen>
         model.loadData(countryName: widget.info.name);
       },
       builder: (context, model, child) => Scaffold(
-        //backgroundColor: kPrimaryColor,
         body: CustomScrollView(
           slivers: <Widget>[
             SliverAppBar(
               floating: true,
               title: Text(
-                'Covid-19 Info App',
+                'Covid-19 Info',
                 style: kAppBarTitleStyle,
               ),
               leading: IconButton(

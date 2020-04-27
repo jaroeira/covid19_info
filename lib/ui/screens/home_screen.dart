@@ -54,7 +54,7 @@ class _HomeScreenState extends State<HomeScreen>
                 floating: true,
                 pinned: true,
                 title: Text(
-                  'Covid-19 Info App',
+                  'Covid-19 Info',
                   style: kAppBarTitleStyle,
                 ),
                 actions: <Widget>[

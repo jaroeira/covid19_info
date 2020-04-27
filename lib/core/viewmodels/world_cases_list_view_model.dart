@@ -27,6 +27,7 @@ class WorldCasesListViewModel extends BaseModel {
   //List with Top 5 counstries with most cases
   List<CountryInfo> _top5ByCasesCountryInfoList = [];
 
+  //World Statistic numbers
   WorldInfo _worldInfo = WorldInfo();
 
   WorldInfo get worldInfo => _worldInfo;
@@ -38,6 +39,7 @@ class WorldCasesListViewModel extends BaseModel {
   List<CountryInfo> get countryInfoList =>
       _filterText == '' ? _sortedCountryInfoList : _filteredCountryInfoList;
 
+  //Return a list with the Top 5 contries with the most cases
   List<CountryInfo> get top5ByCasesCountryInfoList {
     _top5ByCasesCountryInfoList.clear();
     _top5ByCasesCountryInfoList.addAll(_countryInfoList);
@@ -51,12 +53,14 @@ class WorldCasesListViewModel extends BaseModel {
     return _top5ByCasesCountryInfoList;
   }
 
+  //Check if the app has the user location
   bool hasUserLocation() {
     return userLocation != null && _userIsoCountryCode != '';
   }
 
   String _filterText = '';
 
+  //Every time a search term is inserted a filtered list is created and the UI receives a notification to refresh
   set filterText(String text) {
     setState(ViewState.Busy);
     _filterText = text;
@@ -74,6 +78,7 @@ class WorldCasesListViewModel extends BaseModel {
     setState(ViewState.Idle);
   }
 
+  //Load all the data from the API
   Future loadData() async {
     setState(ViewState.Busy);
 
@@ -106,9 +111,6 @@ class WorldCasesListViewModel extends BaseModel {
       //Sort Country List by name
       _countryInfoList.sort((a, b) => a.name.compareTo(b.name));
       _sortedCountryInfoList.addAll(_countryInfoList);
-
-      // _countryInfoList.forEach((country) =>
-      //     print('cases: ${country.numberOfCases} Cases2: ${country.cases}'));
     } catch (e) {
       setState(ViewState.Error);
       throw e;
@@ -119,7 +121,6 @@ class WorldCasesListViewModel extends BaseModel {
     try {
       Map<String, dynamic> jsonData = await repository.getWorldTotalStat();
       _worldInfo = WorldInfo.fromJson(jsonData);
-      print('getWorldTotalStat: $_worldInfo');
     } catch (e) {
       setState(ViewState.Error);
       throw e;

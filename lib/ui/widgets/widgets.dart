@@ -3,28 +3,6 @@ import 'package:covid19_info/ui/const.dart';
 import 'package:covid19_info/ui/screens/country_detail_screen.dart';
 import 'package:flutter/material.dart';
 
-class FixedHeightContainer extends StatelessWidget {
-  final double height;
-  final Widget child;
-  final Color color;
-  final EdgeInsetsGeometry padding;
-
-  FixedHeightContainer({this.height, this.child, this.color, this.padding});
-
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      height: height,
-      width: double.infinity,
-      child: Container(
-        padding: padding,
-        child: child,
-        color: color,
-      ),
-    );
-  }
-}
-
 class RoundCornerContainer extends StatelessWidget {
   final double height;
   final Color color;
@@ -190,14 +168,16 @@ class HorizontalCard extends StatelessWidget {
 
 class VerticalListView extends StatelessWidget {
   final List<CountryInfo> itemsList;
+  final ScrollController controller;
 
-  VerticalListView({this.itemsList});
+  VerticalListView({this.itemsList, this.controller});
 
   @override
   Widget build(BuildContext context) {
     return Container(
       margin: EdgeInsets.symmetric(horizontal: 5.0, vertical: 8.0),
       child: ListView.builder(
+        controller: controller,
         itemCount: itemsList.length,
         itemBuilder: (context, index) {
           final item = itemsList[index];

@@ -73,7 +73,7 @@ class WorldInfoScreen extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          FixedHeightContainer(
+          Container(
             height: 70,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -99,7 +99,7 @@ class WorldInfoScreen extends StatelessWidget {
           DescriptionLabelRow(),
           kDefaultVerticalSpacer,
           model.hasUserLocation()
-              ? FixedHeightContainer(
+              ? Container(
                   height: 180,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -123,7 +123,7 @@ class WorldInfoScreen extends StatelessWidget {
                   ),
                 )
               : Container(),
-          FixedHeightContainer(
+          Container(
             height: 165,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,

@@ -19,6 +19,14 @@ class _CountryListScreenState extends State<CountryListScreen> {
 
   CountryInfoListSortType sortedByValue = CountryInfoListSortType.Name;
 
+  ScrollController _listViewController;
+
+  @override
+  void initState() {
+    super.initState();
+    _listViewController = ScrollController();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -72,6 +80,7 @@ class _CountryListScreenState extends State<CountryListScreen> {
           _buildSortComponent(),
           Expanded(
             child: VerticalListView(
+              controller: _listViewController,
               itemsList: widget.model.countryInfoList,
             ),
           ),
@@ -137,6 +146,10 @@ class _CountryListScreenState extends State<CountryListScreen> {
               onChanged: (sortType) {
                 sortedByValue = sortType;
                 widget.model.sortCountryList(sortType);
+                _listViewController
+                  ..animateTo(0.0,
+                      duration: Duration(milliseconds: 300),
+                      curve: Curves.easeOut);
               }),
           IconButton(
               icon: Icon(
