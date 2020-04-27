@@ -1,3 +1,5 @@
+import 'package:intl/intl.dart';
+
 const wiTotalCasesJsonKey = 'total_cases';
 const wiNewCasesJsonKey = 'new_cases';
 const wiNewDeathsJsonKey = 'new_deaths';
@@ -17,9 +19,9 @@ class WorldInfo {
   final String seriousCritical;
   final DateTime recordDate;
 
-  String get statisticDateAsString {
-    final String strDate =
-        '${recordDate.day}.${recordDate.month}.${recordDate.year}';
+  String get formattedRecodDateAsString {
+    final format = DateFormat.yMMMMd("en_US");
+    final String strDate = format.format(recordDate);
     return strDate;
   }
 

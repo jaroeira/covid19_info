@@ -161,25 +161,20 @@ class WorldCasesListViewModel extends BaseModel {
     setState(ViewState.Busy);
     switch (sortBy) {
       case CountryInfoListSortType.Cases:
-        _sortedCountryInfoList.sort((a, b) =>
-            int.parse(a.numberOfCases.replaceAll(',', ''))
-                .compareTo(int.parse(b.numberOfCases.replaceAll(',', ''))));
+        _sortedCountryInfoList
+            .sort((a, b) => a.casesAsInt.compareTo(b.casesAsInt));
         break;
       case CountryInfoListSortType.Deaths:
-        _sortedCountryInfoList.sort((a, b) =>
-            int.parse(a.numberOfDeaths.replaceAll(',', ''))
-                .compareTo(int.parse(b.numberOfDeaths.replaceAll(',', ''))));
+        _sortedCountryInfoList
+            .sort((a, b) => a.deathsAsInt.compareTo(b.deathsAsInt));
         break;
       case CountryInfoListSortType.Active:
-        _sortedCountryInfoList.sort((a, b) =>
-            int.parse(a.activeCases.replaceAll(',', ''))
-                .compareTo(int.parse(b.activeCases.replaceAll(',', ''))));
+        _sortedCountryInfoList
+            .sort((a, b) => a.activeCasesAsInt.compareTo(b.activeCasesAsInt));
         break;
       case CountryInfoListSortType.Recovered:
-        _sortedCountryInfoList.sort((a, b) => int.tryParse(
-                a.totalRecovered.replaceAll(',', '').replaceAll('N/A', '0'))
-            .compareTo(int.tryParse(
-                b.totalRecovered.replaceAll(',', '').replaceAll('N/A', '0'))));
+        _sortedCountryInfoList.sort(
+            (a, b) => a.totalRecoveredAsInt.compareTo(b.totalRecoveredAsInt));
         break;
       case CountryInfoListSortType.Name:
         _sortedCountryInfoList.sort((a, b) => a.name.compareTo(b.name));

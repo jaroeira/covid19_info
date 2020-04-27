@@ -87,7 +87,7 @@ class WorldInfoScreen extends StatelessWidget {
                   style: kLabelTextStyle,
                 ),
                 Text(
-                  'Updated on ${model.worldInfo.statisticDateAsString}',
+                  'Updated on ${model.worldInfo.formattedRecodDateAsString}',
                   style: kLabelTextStyle.copyWith(fontWeight: FontWeight.bold),
                 ),
               ],
