@@ -6,13 +6,7 @@ import 'package:covid19_info/core/viewmodels/country_detail_view_model.dart';
 import '../base_provider_view.dart';
 import '../const.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
-
-enum ChartSerieType {
-  TotalCases,
-  TotalDeaths,
-  TotalRecovered,
-  NewCases,
-}
+import 'package:covid19_info/core/enums/chart_serie_type.dart';
 
 class CountryDetailScreen extends StatefulWidget {
   static const String id = 'CountryDetailScreen';

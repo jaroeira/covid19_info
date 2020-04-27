@@ -2,6 +2,7 @@ import 'package:covid19_info/core/viewmodels/world_cases_list_view_model.dart';
 import 'package:covid19_info/ui/const.dart';
 import 'package:covid19_info/ui/widgets/widgets.dart';
 import 'package:flutter/material.dart';
+import 'package:covid19_info/core/enums/country_info_list_sort_type.dart';
 
 class CountryListScreen extends StatefulWidget {
   static const String id = 'CountryListScreen';

@@ -5,14 +5,7 @@ import 'package:covid19_info/core/repositories/covid19_info_repository.dart';
 import 'package:covid19_info/core/services/location_service.dart';
 import 'package:covid19_info/core/viewmodels/base_view_model.dart';
 import 'package:covid19_info/locator.dart';
-
-enum CountryInfoListSortType {
-  Cases,
-  Deaths,
-  Active,
-  Recovered,
-  Name,
-}
+import 'package:covid19_info/core/enums/country_info_list_sort_type.dart';
 
 class WorldCasesListViewModel extends BaseModel {
   final repository = locator<Covid19InfoRepository>();
