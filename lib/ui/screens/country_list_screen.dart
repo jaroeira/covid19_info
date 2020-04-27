@@ -17,6 +17,8 @@ class CountryListScreen extends StatefulWidget {
 class _CountryListScreenState extends State<CountryListScreen> {
   TextEditingController _textEditingController = TextEditingController();
 
+  CountryInfoListSortType sortedByValue = CountryInfoListSortType.Name;
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -66,11 +68,84 @@ class _CountryListScreenState extends State<CountryListScreen> {
           ),
           kDefaultVerticalSpacer,
           DescriptionLabelRow(),
+          kDefaultVerticalSpacer,
+          _buildSortComponent(),
           Expanded(
             child: VerticalListView(
               itemsList: widget.model.countryInfoList,
             ),
           ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildSortComponent() {
+    return Container(
+      width: double.infinity,
+      margin: EdgeInsets.symmetric(horizontal: 10),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          Text(
+            'Sorted by',
+            style: kLabelTextStyle,
+          ),
+          SizedBox(
+            width: 10,
+          ),
+          DropdownButton(
+              value: sortedByValue,
+              icon: Icon(Icons.sort),
+              items: <DropdownMenuItem>[
+                DropdownMenuItem(
+                  child: Text(
+                    'Name',
+                    style: kLabelTextStyle,
+                  ),
+                  value: CountryInfoListSortType.Name,
+                ),
+                DropdownMenuItem(
+                  child: Text(
+                    'Cases',
+                    style: kLabelTextStyle,
+                  ),
+                  value: CountryInfoListSortType.Cases,
+                ),
+                DropdownMenuItem(
+                  child: Text(
+                    'Deaths',
+                    style: kLabelTextStyle,
+                  ),
+                  value: CountryInfoListSortType.Deaths,
+                ),
+                DropdownMenuItem(
+                  child: Text(
+                    'Active',
+                    style: kLabelTextStyle,
+                  ),
+                  value: CountryInfoListSortType.Active,
+                ),
+                DropdownMenuItem(
+                  child: Text(
+                    'Recovered',
+                    style: kLabelTextStyle,
+                  ),
+                  value: CountryInfoListSortType.Recovered,
+                ),
+              ],
+              onChanged: (sortType) {
+                sortedByValue = sortType;
+                widget.model.sortCountryList(sortType);
+              }),
+          IconButton(
+              icon: Icon(
+                Icons.swap_vert,
+                color: kSecondaryTextColor,
+              ),
+              onPressed: () {
+                widget.model.toggleSortOder();
+              }),
         ],
       ),
     );

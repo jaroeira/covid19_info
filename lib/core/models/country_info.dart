@@ -26,9 +26,15 @@ class CountryInfo {
       this.totalRecovered = '0',
       this.recordDateString = '2019-12-20 00:00:00.000'});
 
+  //Convenient type conversions
   DateTime get recordDate =>
       DateTime.tryParse(recordDateString) ?? DateTime.now();
-  int get cases => int.tryParse(numberOfCases.replaceAll(',', ''));
+  int get casesAsInt => int.tryParse(numberOfCases.replaceAll(',', '')) ?? 0;
+  int get deathsAsInt => int.tryParse(numberOfDeaths.replaceAll(',', '')) ?? 0;
+  int get totalRecoveredAsInt =>
+      int.tryParse(totalRecovered.replaceAll(',', '')) ?? 0;
+  int get activeCasesAsInt =>
+      int.tryParse(activeCases.replaceAll(',', '')) ?? 0;
 
   @override
   String toString() =>
@@ -38,10 +44,10 @@ class CountryInfo {
     return CountryInfo(
         name: json[ciNameJsonKey] as String,
         isoCode: mapCountryToIso[json[ciNameJsonKey]] ?? 'XX',
-        numberOfCases: json[ciNumberOfCasesJsonKey] as String,
-        numberOfDeaths: json[ciNumberOfDeathsJsonKey] as String,
-        totalRecovered: json[ciTotalRecoveredJsonKey] as String,
-        activeCases: json[ciActiveCasesJsonKey] as String,
+        numberOfCases: json[ciNumberOfCasesJsonKey] as String ?? '0',
+        numberOfDeaths: json[ciNumberOfDeathsJsonKey] as String ?? '0',
+        totalRecovered: json[ciTotalRecoveredJsonKey] as String ?? '0',
+        activeCases: json[ciActiveCasesJsonKey] as String ?? '0',
         recordDateString: json[ciRecordDateStringJsonKey] as String ?? '');
   }
 }

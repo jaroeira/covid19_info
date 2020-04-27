@@ -6,6 +6,14 @@ import 'package:covid19_info/core/services/location_service.dart';
 import 'package:covid19_info/core/viewmodels/base_view_model.dart';
 import 'package:covid19_info/locator.dart';
 
+enum CountryInfoListSortType {
+  Cases,
+  Deaths,
+  Active,
+  Recovered,
+  Name,
+}
+
 class WorldCasesListViewModel extends BaseModel {
   final repository = locator<Covid19InfoRepository>();
 
@@ -13,7 +21,10 @@ class WorldCasesListViewModel extends BaseModel {
   List<CountryInfo> _countryInfoList = [];
   //Filtered version of the data retived from the API
   List<CountryInfo> _filteredCountryInfoList = [];
+  //Sorted version of the data retived from the API
+  List<CountryInfo> _sortedCountryInfoList = [];
 
+  //List with Top 5 counstries with most cases
   List<CountryInfo> _top5ByCasesCountryInfoList = [];
 
   WorldInfo _worldInfo = WorldInfo();
@@ -25,14 +36,13 @@ class WorldCasesListViewModel extends BaseModel {
 
   //If there is a filter term return the filtered list else return the full list
   List<CountryInfo> get countryInfoList =>
-      _filterText == '' ? _countryInfoList : _filteredCountryInfoList;
+      _filterText == '' ? _sortedCountryInfoList : _filteredCountryInfoList;
 
   List<CountryInfo> get top5ByCasesCountryInfoList {
     _top5ByCasesCountryInfoList.clear();
     _top5ByCasesCountryInfoList.addAll(_countryInfoList);
-    _top5ByCasesCountryInfoList.sort((b, a) =>
-        int.parse(a.numberOfCases.replaceAll(',', ''))
-            .compareTo(int.parse(b.numberOfCases.replaceAll(',', ''))));
+    _top5ByCasesCountryInfoList
+        .sort((b, a) => a.casesAsInt.compareTo(b.casesAsInt));
     final endIndex = _top5ByCasesCountryInfoList.length >= 5
         ? 5
         : _top5ByCasesCountryInfoList.length;
@@ -56,7 +66,7 @@ class WorldCasesListViewModel extends BaseModel {
       return;
     }
 
-    _filteredCountryInfoList = _countryInfoList
+    _filteredCountryInfoList = _sortedCountryInfoList
         .where((countryInfo) => countryInfo.name
             .toLowerCase()
             .startsWith(_filterText.toLowerCase()))
@@ -76,6 +86,7 @@ class WorldCasesListViewModel extends BaseModel {
 
   Future _getCovid19InfoCountryList() async {
     _countryInfoList.clear();
+    _sortedCountryInfoList.clear();
 
     try {
       Map<String, dynamic> jsonData = await repository.getCasesByCountry();
@@ -94,6 +105,7 @@ class WorldCasesListViewModel extends BaseModel {
 
       //Sort Country List by name
       _countryInfoList.sort((a, b) => a.name.compareTo(b.name));
+      _sortedCountryInfoList.addAll(_countryInfoList);
 
       // _countryInfoList.forEach((country) =>
       //     print('cases: ${country.numberOfCases} Cases2: ${country.cases}'));
@@ -134,5 +146,48 @@ class WorldCasesListViewModel extends BaseModel {
       _userIsoCountryCode = '';
       print('Location Perssmision Denied!');
     }
+  }
+
+  void toggleSortOder() {
+    //_sortedAscending = !_sorted
+    setState(ViewState.Busy);
+    final reversedList = _sortedCountryInfoList.reversed.toList();
+    _sortedCountryInfoList.clear();
+    _sortedCountryInfoList.addAll(reversedList);
+    setState(ViewState.Idle);
+  }
+
+  void sortCountryList(CountryInfoListSortType sortBy) {
+    setState(ViewState.Busy);
+    switch (sortBy) {
+      case CountryInfoListSortType.Cases:
+        _sortedCountryInfoList.sort((a, b) =>
+            int.parse(a.numberOfCases.replaceAll(',', ''))
+                .compareTo(int.parse(b.numberOfCases.replaceAll(',', ''))));
+        break;
+      case CountryInfoListSortType.Deaths:
+        _sortedCountryInfoList.sort((a, b) =>
+            int.parse(a.numberOfDeaths.replaceAll(',', ''))
+                .compareTo(int.parse(b.numberOfDeaths.replaceAll(',', ''))));
+        break;
+      case CountryInfoListSortType.Active:
+        _sortedCountryInfoList.sort((a, b) =>
+            int.parse(a.activeCases.replaceAll(',', ''))
+                .compareTo(int.parse(b.activeCases.replaceAll(',', ''))));
+        break;
+      case CountryInfoListSortType.Recovered:
+        _sortedCountryInfoList.sort((a, b) => int.tryParse(
+                a.totalRecovered.replaceAll(',', '').replaceAll('N/A', '0'))
+            .compareTo(int.tryParse(
+                b.totalRecovered.replaceAll(',', '').replaceAll('N/A', '0'))));
+        break;
+      case CountryInfoListSortType.Name:
+        _sortedCountryInfoList.sort((a, b) => a.name.compareTo(b.name));
+        break;
+      default:
+        _sortedCountryInfoList.sort((a, b) => a.name.compareTo(b.name));
+        break;
+    }
+    setState(ViewState.Idle);
   }
 }

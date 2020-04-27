@@ -15,11 +15,11 @@ class WorldInfo {
   final String totalRecovered;
   final String activeCases;
   final String seriousCritical;
-  final DateTime statisticTakenAt;
+  final DateTime recordDate;
 
   String get statisticDateAsString {
     final String strDate =
-        '${statisticTakenAt.day}.${statisticTakenAt.month}.${statisticTakenAt.year}';
+        '${recordDate.day}.${recordDate.month}.${recordDate.year}';
     return strDate;
   }
 
@@ -31,11 +31,11 @@ class WorldInfo {
       this.totalRecovered = '0',
       this.activeCases = '0',
       this.seriousCritical = '0',
-      this.statisticTakenAt});
+      this.recordDate});
 
   @override
   String toString() =>
-      '{ totalCases: $totalCases, newCases: $newCases, totalDeaths: $totalDeaths, totalRecovered: $totalRecovered, statisticTakenAt: $statisticTakenAt }';
+      '{ totalCases: $totalCases, newCases: $newCases, totalDeaths: $totalDeaths, totalRecovered: $totalRecovered, statisticTakenAt: $recordDate }';
 
   factory WorldInfo.fromJson(Map<String, dynamic> json) {
     return WorldInfo(
@@ -46,7 +46,7 @@ class WorldInfo {
       totalRecovered: json[wiTotalRecoveredJsonKey] as String,
       activeCases: json[wiActiveCasesJsonKey] as String,
       seriousCritical: json[wiSeriousCriticalJsonKey] as String,
-      statisticTakenAt: DateTime.tryParse(json[wiStatisticTakenAtJsonKey]),
+      recordDate: DateTime.tryParse(json[wiStatisticTakenAtJsonKey]),
     );
   }
 }

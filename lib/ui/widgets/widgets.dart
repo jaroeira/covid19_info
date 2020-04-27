@@ -143,7 +143,7 @@ class HorizontalCard extends StatelessWidget {
                     ),
                     SizedBox(height: 8.0),
                     DotLabel(
-                      labelText: item.numberOfCases,
+                      labelText: item.numberOfCases.toString(),
                       dotColor: Colors.purple,
                     ),
                     SizedBox(height: 8.0),
@@ -262,7 +262,7 @@ class VerticalCard extends StatelessWidget {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: <Widget>[
                               DotLabel(
-                                labelText: item.numberOfCases,
+                                labelText: item.numberOfCases.toString(),
                                 dotColor: Colors.purple,
                               ),
                               SizedBox(
