@@ -16,7 +16,9 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen>
     with SingleTickerProviderStateMixin {
   TabController _tabController;
-  ScrollController _scrollController = ScrollController();
+  ScrollController _scrollController;
+
+  static const double mainContentHeight = 697.0;
 
   bool isRefreshing = false;
 
@@ -24,6 +26,7 @@ class _HomeScreenState extends State<HomeScreen>
   void initState() {
     super.initState();
     _tabController = TabController(length: 2, vsync: this);
+    _scrollController = ScrollController();
   }
 
   @override
@@ -37,7 +40,6 @@ class _HomeScreenState extends State<HomeScreen>
     return BaseProviderView<WorldCasesListViewModel>(
       modelCallBack: (model) async {
         await model.loadData();
-        print('MediaQuery height ${MediaQuery.of(context).size.height}');
       },
       builder: (context, model, child) => Scaffold(
         body: RefreshIndicator(
@@ -73,7 +75,7 @@ class _HomeScreenState extends State<HomeScreen>
                 delegate: SliverChildListDelegate([
                   Container(
                     width: double.infinity,
-                    height: 697,
+                    height: mainContentHeight,
                     child: TabBarView(
                       controller: _tabController,
                       children: <Widget>[

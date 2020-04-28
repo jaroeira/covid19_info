@@ -14,7 +14,7 @@ class Covid19InfoRepository {
 
   static const Map<String, String> headers = {
     'x-rapidapi-host': 'coronavirus-monitor.p.rapidapi.com',
-    'x-rapidapi-key': '9118a83df6mshb9cc3dc89ce1fedp16e57ejsn4a59127f4d20'
+    'x-rapidapi-key': 'Insert Yout API Key' //Get a API Key on rapidapi.com
   };
 
   var _httpClient = http.Client();
