@@ -1,6 +1,7 @@
 # covid19_info
 
-![Project Image](https://github.com/jaroeira/covid19_info/blob/master/ScreenShot1.jpeg) ![Project Image](https://github.com/jaroeira/covid19_info/blob/master/ScreenShot2.jpeg)
+![screenshot 1](https://github.com/jaroeira/covid19_info/blob/master/ScreenShot1.jpeg) ![screen shot 2](https://github.com/jaroeira/covid19_info/blob/master/ScreenShot2.jpeg)
+
 
 ---
 
