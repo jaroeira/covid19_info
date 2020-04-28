@@ -210,79 +210,68 @@ class VerticalCard extends StatelessWidget {
           height: 85,
           margin: EdgeInsets.symmetric(horizontal: 5.0),
           padding: EdgeInsets.symmetric(horizontal: 8.0, vertical: 10.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+          width: double.infinity,
+          child: Row(
             children: <Widget>[
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  Expanded(
-                    flex: 1,
-                    child: Container(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: <Widget>[
-                          Image.asset(
-                            'images/flags/${item.isoCode.toLowerCase()}.png',
-                            height: 40.0,
-                            width: 40.0,
-                          ),
-                        ],
-                      ),
+              Container(
+                width: 140,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Image.asset(
+                      'images/flags/${item.isoCode.toLowerCase()}.png',
+                      height: 40.0,
+                      width: 40.0,
                     ),
-                  ),
-                  Expanded(
-                    flex: 5,
-                    child: Container(
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: <Widget>[
-                          Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: <Widget>[
-                              DotLabel(
-                                labelText: item.numberOfCases.toString(),
-                                dotColor: Colors.purple,
-                              ),
-                              SizedBox(
-                                height: 5.0,
-                              ),
-                              DotLabel(
-                                labelText: item.numberOfDeaths,
-                                dotColor: Colors.red,
-                              ),
-                            ],
-                          ),
-                          Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: <Widget>[
-                              DotLabel(
-                                labelText: item.activeCases,
-                                dotColor: Colors.yellow,
-                              ),
-                              SizedBox(
-                                height: 5.0,
-                              ),
-                              DotLabel(
-                                labelText: item.totalRecovered,
-                                dotColor: Colors.green,
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
+                    Text(
+                      item.name,
+                      overflow: TextOverflow.ellipsis,
+                      style: kLabelTextStyle,
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
-              Padding(
-                padding: const EdgeInsets.only(left: 5.0),
-                child: Text(
-                  item.name,
-                  overflow: TextOverflow.ellipsis,
-                  style: kLabelTextStyle,
+              Expanded(
+                flex: 1,
+                child: Container(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      DotLabel(
+                        labelText: item.numberOfCases.toString(),
+                        dotColor: Colors.purple,
+                      ),
+                      SizedBox(
+                        height: 5.0,
+                      ),
+                      DotLabel(
+                        labelText: item.numberOfDeaths,
+                        dotColor: Colors.red,
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              Expanded(
+                flex: 1,
+                child: Container(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      DotLabel(
+                        labelText: item.activeCases,
+                        dotColor: Colors.yellow,
+                      ),
+                      SizedBox(
+                        height: 5.0,
+                      ),
+                      DotLabel(
+                        labelText: item.totalRecovered,
+                        dotColor: Colors.green,
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ],

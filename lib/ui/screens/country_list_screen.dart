@@ -18,7 +18,7 @@ class CountryListScreen extends StatefulWidget {
 class _CountryListScreenState extends State<CountryListScreen> {
   TextEditingController _textEditingController = TextEditingController();
 
-  CountryInfoListSortType sortedByValue = CountryInfoListSortType.Name;
+  CountryInfoListSortType sortedByValue = CountryInfoListSortType.Cases;
 
   ScrollController _listViewController;
 

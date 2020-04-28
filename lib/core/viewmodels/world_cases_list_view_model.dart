@@ -102,8 +102,8 @@ class WorldCasesListViewModel extends BaseModel {
       _countryInfoList.removeWhere((country) => country.name == '');
 
       //Sort Country List by name
-      _countryInfoList.sort((a, b) => a.name.compareTo(b.name));
-      _sortedCountryInfoList.addAll(_countryInfoList);
+      _countryInfoList.sort((a, b) => a.casesAsInt.compareTo(b.casesAsInt));
+      _sortedCountryInfoList.addAll(_countryInfoList.reversed.toList());
     } catch (e) {
       setState(ViewState.Error);
       throw e;

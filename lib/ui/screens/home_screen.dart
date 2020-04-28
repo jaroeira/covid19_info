@@ -37,6 +37,7 @@ class _HomeScreenState extends State<HomeScreen>
     return BaseProviderView<WorldCasesListViewModel>(
       modelCallBack: (model) async {
         await model.loadData();
+        print('MediaQuery height ${MediaQuery.of(context).size.height}');
       },
       builder: (context, model, child) => Scaffold(
         body: RefreshIndicator(
@@ -50,7 +51,6 @@ class _HomeScreenState extends State<HomeScreen>
             scrollDirection: Axis.vertical,
             slivers: <Widget>[
               SliverAppBar(
-                //backgroundColor: Colors.white,
                 floating: true,
                 pinned: true,
                 title: Text(
@@ -73,7 +73,7 @@ class _HomeScreenState extends State<HomeScreen>
                 delegate: SliverChildListDelegate([
                   Container(
                     width: double.infinity,
-                    height: MediaQuery.of(context).size.height - 120,
+                    height: 697,
                     child: TabBarView(
                       controller: _tabController,
                       children: <Widget>[

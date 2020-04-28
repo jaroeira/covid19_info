@@ -96,6 +96,12 @@ class WorldInfoScreen extends StatelessWidget {
           WorldInfoPanel(
             model: model,
           ),
+          Padding(
+            padding: const EdgeInsets.only(left: 10, right: 10, bottom: 5),
+            child: Divider(
+              thickness: 0.5,
+            ),
+          ),
           DescriptionLabelRow(),
           kDefaultVerticalSpacer,
           model.hasUserLocation()
