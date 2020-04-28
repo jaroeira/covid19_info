@@ -1,6 +1,6 @@
 # covid19_info
 
-![screenshot 1](https://github.com/jaroeira/covid19_info/blob/master/ScreenShot1.jpeg) ![screen shot 2](https://github.com/jaroeira/covid19_info/blob/master/ScreenShot2.jpeg)
+![screenshot 1](https://github.com/jaroeira/covid19_info/blob/master/ScreenShot1.jpeg) ![screen shot 2](https://github.com/jaroeira/covid19_info/blob/master/ScreenShot2.jpeg)![screen shot 3](https://github.com/jaroeira/covid19_info/blob/master/ScreenShot3.jpeg)
 
 
 ---
@@ -20,6 +20,8 @@ You're sections headers will be used to reference location of destination.
 This is a simple Flutter App that displays the latest infomations about the Covid-19 outbreak. 
 A simple user interface shows data about the Covid19 situation in the world and also by country. The App uses the data provided by Johns Hopkins University.
 This App was developed in Flutter using the provider package. 
+
+
 
 #### Tecnologies
 
