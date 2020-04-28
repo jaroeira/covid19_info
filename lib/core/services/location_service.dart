@@ -32,11 +32,7 @@ class LocationService {
         .timeout(Duration(seconds: 5));
 
     if (placemarkList.length > 0) {
-      print('placemarkList.length ${placemarkList.length}');
       final placemark = placemarkList.first;
-
-      print(
-          'Placemark: country: ${placemark.country}, isoCountryCode: ${placemark.isoCountryCode} ');
 
       return placemark.isoCountryCode != null
           ? placemark.isoCountryCode.toLowerCase()
