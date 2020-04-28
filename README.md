@@ -72,5 +72,7 @@ SOFTWARE.
 ## Author Info
 
 - Twitter - [@joaomenicucci](https://twitter.com/joaomenicucci)
+- Instagram - [@j.aroeira]
+
 
 [Back To The Top](#read-me-template)
