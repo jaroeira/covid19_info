@@ -1,8 +1,6 @@
 # covid19_info
 
-![Project Image](project-image-url)
-
-> This is a ReadMe template to help save you time and effort.
+![Project Image](https://github.com/jaroeira/covid19_info/blob/master/ScreenShot1.jpeg)
 
 ---
 
